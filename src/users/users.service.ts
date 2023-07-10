@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { User } from "./entities/user.entity";
+import { AuthRoles } from "./enums/AuthRoles";
 
 @Injectable()
 export class UsersService {
@@ -10,11 +11,15 @@ export class UsersService {
             id: 1,
             name: "John Doe",
             email: "john@example.com",
+            passwordHash: "changeme",
+            role: AuthRoles.ADMIN,
         },
         {
             id: 2,
             name: "Jane Smith",
             email: "jane@example.com",
+            passwordHash: "changeme",
+            role: AuthRoles.USER,
         },
     ];
 
@@ -23,6 +28,9 @@ export class UsersService {
             id: this.users.length + 1,
             name: createUserInput.name,
             email: createUserInput.email,
+            // passwordHash: hash(createUserInput.password)
+            passwordHash: createUserInput.password,
+            role: createUserInput.role,
         };
         this.users.push(newUser);
         return newUser;
@@ -30,6 +38,10 @@ export class UsersService {
 
     findAll(): User[] {
         return this.users;
+    }
+
+    findByEmail(email: string): User {
+        return this.users.find((user) => user.email === email);
     }
 
     findOne(id: number): User {
@@ -41,6 +53,7 @@ export class UsersService {
         if (user) {
             user.name = updateUserInput.name;
             user.email = updateUserInput.email;
+            user.role = updateUserInput.role;
         }
         return user;
     }

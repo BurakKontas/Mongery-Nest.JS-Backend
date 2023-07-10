@@ -2,17 +2,20 @@ type User {
     id: Int!
     name: String!
     email: String!
+    role: String!
 }
 
 input CreateUserInput {
     name: String!
     email: String!
+    role: String!
 }
 
 input UpdateUserInput {
     id: Int!
     name: String!
     email: String!
+    role: String!
 }
 
 type Query {

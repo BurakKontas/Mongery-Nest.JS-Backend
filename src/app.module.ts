@@ -3,8 +3,10 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
-import { join } from "path"; // path modülünü ekledik
+import { JwtModule } from "@nestjs/jwt"; // Import JwtModule
+
 @Module({
     imports: [
         GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -13,7 +15,9 @@ import { join } from "path"; // path modülünü ekledik
             path: "/api",
             typePaths: ["./**/*.graphql"],
         }),
+        AuthModule,
         UsersModule,
+        JwtModule, // Add JwtModule here
     ],
     controllers: [AppController],
     providers: [AppService],
