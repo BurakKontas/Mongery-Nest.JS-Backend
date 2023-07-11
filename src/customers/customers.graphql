@@ -11,10 +11,10 @@ type Customer {
 }
 
 input CreateCustomerInput {
-    name: String
-    email: String
+    name: String!
+    email: String!
     phone: String
-    firmName: String
+    firmName: String!
     avatar: String
     description: String
 }

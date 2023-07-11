@@ -1,17 +1,17 @@
 type Category {
     id: Int!
-    name: String
+    name: String!
     createdAt: DateTime
     updatedAt: DateTime
 }
 
 input CreateCategoryInput {
-    name: String
+    name: String!
 }
 
 input UpdateCategoryInput {
     id: Int!
-    name: String
+    name: String!
 }
 
 type Query {

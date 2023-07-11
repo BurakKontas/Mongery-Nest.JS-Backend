@@ -6,12 +6,12 @@ type State {
 }
 
 input CreateStateInput {
-    name: String
+    name: String!
 }
 
 input UpdateStateInput {
     id: Int!
-    name: String
+    name: String!
 }
 
 type Query {
