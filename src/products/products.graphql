@@ -1,0 +1,44 @@
+type Product {
+    id: Int!
+    image: String
+    title: String
+    stateId: Int
+    categoryId: Int
+    price: Float
+    stock: Int
+    variant: String
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+input CreateProductInput {
+    image: String
+    title: String
+    stateId: Int
+    categoryId: Int
+    price: Float
+    stock: Int
+    variant: String
+}
+
+input UpdateProductInput {
+    id: Int!
+    image: String
+    title: String
+    stateId: Int
+    categoryId: Int
+    price: Float
+    stock: Int
+    variant: String
+}
+
+type Query {
+    products: [Product]!
+    product(id: Int!): Product
+}
+
+type Mutation {
+    createProduct(createProductInput: CreateProductInput!): Product!
+    updateProduct(updateProductInput: UpdateProductInput!): Product!
+    removeProduct(id: Int!): Product
+}

@@ -1,0 +1,26 @@
+type State {
+    id: Int!
+    name: String
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+input CreateStateInput {
+    name: String
+}
+
+input UpdateStateInput {
+    id: Int!
+    name: String
+}
+
+type Query {
+    states: [State]!
+    state(id: Int!): State
+}
+
+type Mutation {
+    createState(createStateInput: CreateStateInput!): State!
+    updateState(updateStateInput: UpdateStateInput!): State!
+    removeState(id: Int!): State
+}

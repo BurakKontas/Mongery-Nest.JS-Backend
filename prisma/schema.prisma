@@ -11,11 +11,89 @@ datasource db {
 }
 
 model Users {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
+  id           Int          @id @default(autoincrement())
+  email        String       @unique
   name         String?
   passwordHash String
-  role         String   @default("user")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  role         String       @default("user")
+  customers    Customers[]  @relation("customer-user")
+  categories   Categories[] @relation("category-user")
+  States       States[]     @relation("state-user")
+  Products     Products[]   @relation("product-user")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([email])
+}
+
+model Customers {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  phone       String
+  firmName    String
+  avatar      String // guid tutulacak burada o guid yi minio dan eşleştiricez // default avatar eklenecek
+  description String?
+  userId      Int
+  user        Users    @relation(fields: [userId], references: [id], name: "customer-user", onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Categories {
+  id        Int        @id @default(autoincrement())
+  name      String
+  userId    Int
+  user      Users      @relation(fields: [userId], references: [id], name: "category-user", onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Products  Products[] @relation("product-category")
+
+  @@index([userId])
+}
+
+model States {
+  id        Int        @id @default(autoincrement())
+  name      String
+  userId    Int
+  user      Users      @relation(fields: [userId], references: [id], name: "state-user", onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Products  Products[] @relation("product-state")
+
+  @@index([userId])
+}
+
+model CustomInputs {
+  id        Int      @id @default(autoincrement())
+  key       String
+  value     String
+  productId Int
+  product   Products @relation(fields: [productId], references: [id], name: "custom-input-product", onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+}
+
+model Products {
+  id           Int            @id @default(autoincrement())
+  image        String
+  title        String
+  stateId      Int
+  state        States         @relation(fields: [stateId], references: [id], name: "product-state")
+  categoryId   Int
+  category     Categories     @relation(fields: [categoryId], references: [id], name: "product-category", onDelete: Cascade)
+  price        Float
+  stock        Int
+  variant      String
+  customInputs CustomInputs[] @relation("custom-input-product")
+  userId       Int
+  user         Users          @relation(fields: [userId], references: [id], name: "product-user", onDelete: Cascade)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([userId])
 }

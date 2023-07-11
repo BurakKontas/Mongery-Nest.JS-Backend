@@ -8,6 +8,10 @@ import { UsersModule } from "./users/users.module";
 import { JwtModule } from "@nestjs/jwt"; // Import JwtModule
 import { CrypterModule } from "@crypter/crypter";
 import { MinioModule } from "@minio/minio";
+import { CustomersModule } from './customers/customers.module';
+import { ProductsModule } from './products/products.module';
+import { StatesModule } from './states/states.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
     imports: [
@@ -22,6 +26,10 @@ import { MinioModule } from "@minio/minio";
         JwtModule,
         CrypterModule,
         MinioModule,
+        CustomersModule,
+        ProductsModule,
+        StatesModule,
+        CategoriesModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
-import { User } from "./entities/user.entity";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Users } from "@prisma/client";
 import { CrypterService } from "@crypter/crypter";
 
 @Injectable()
@@ -13,9 +12,9 @@ export class UsersService {
         this.prisma = new PrismaClient();
     }
 
-    async create(createUserInput: CreateUserInput): Promise<User> {
+    async create(createUserInput: CreateUserInput): Promise<Partial<Users>> {
         const hash = await CrypterService.hashPassword(createUserInput.password);
-        const newUser: User = {
+        const newUser: Partial<Users> = {
             name: createUserInput.name,
             email: createUserInput.email,
             passwordHash: hash,
@@ -29,51 +28,63 @@ export class UsersService {
                 passwordHash: newUser.passwordHash,
             },
         });
-        return User.fromPrisma(user);
+
+        var result = structuredClone(user);
+        delete result.passwordHash;
+
+        return result;
     }
 
-    async findAll(): Promise<User[]> {
-        let results = (await this.prisma.users.findMany()).map((user) => User.fromPrisma(user));
+    async findAll(): Promise<Users[]> {
+        let results = (await this.prisma.users.findMany()).map((user) => {
+            let result = structuredClone(user);
+            delete result.passwordHash;
+            return result;
+        });
         return results;
     }
 
-    async findByEmail(email: string): Promise<User> {
+    async findByEmail(email: string): Promise<Users> {
         let user = await this.prisma.users.findUnique({
             where: {
                 email: email,
             },
         });
         if (user) {
-            return User.fromPrisma(user);
+            let result = structuredClone(user);
+            delete result.passwordHash;
+            return result;
         }
         return null;
     }
 
-    async findOne(id: number): Promise<User> {
+    async findOne(id: number): Promise<Users> {
         let user = await this.prisma.users.findUnique({
             where: {
                 id: id,
             },
         });
         if (user) {
-            return User.fromPrisma(user);
+            let result = structuredClone(user);
+            delete result.passwordHash;
+            return result;
         }
         return null;
     }
 
-    async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
+    async update(id: number, updateUserInput: UpdateUserInput): Promise<Users> {
         let user = await this.prisma.users.update({
             where: {
                 id: id,
             },
             data: {
-                name: updateUserInput.name,
-                email: updateUserInput.email,
-                role: updateUserInput.role,
+                ...updateUserInput,
             },
         });
 
-        return User.fromPrisma(user);
+        let result = structuredClone(user);
+        delete result.passwordHash;
+        return result;
     }
 
     async remove(id: number): Promise<boolean> {
