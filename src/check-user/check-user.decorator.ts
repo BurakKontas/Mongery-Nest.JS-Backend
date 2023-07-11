@@ -1,3 +1,3 @@
-import { SetMetadata } from '@nestjs/common';
+import { SetMetadata } from "@nestjs/common";
 
-export const CheckUser = (...args: string[]) => SetMetadata('check-user', args);
+export const CheckUser = (...args: string[]) => SetMetadata("check-user", args);

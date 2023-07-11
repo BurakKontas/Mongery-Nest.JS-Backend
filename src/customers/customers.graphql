@@ -6,8 +6,8 @@ type Customer {
     firmName: String
     avatar: String
     description: String
-    createdAt: DateTime
-    updatedAt: DateTime
+    createdAt: String
+    updatedAt: String
 }
 
 input CreateCustomerInput {
@@ -37,5 +37,5 @@ type Query {
 type Mutation {
     createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
     updateCustomer(updateCustomerInput: UpdateCustomerInput!): Customer!
-    removeCustomer(id: Int!): Customer
+    removeCustomer(id: Int!): Boolean
 }

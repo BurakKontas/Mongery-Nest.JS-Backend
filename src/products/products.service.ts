@@ -7,8 +7,8 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class ProductsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    create(createProductInput: CreateProductInput, userId: number) {
-        let product = this.prisma.client.products.create({
+    async create(createProductInput: CreateProductInput, userId: number) {
+        let product = await this.prisma.client.products.create({
             data: {
                 image: createProductInput.image,
                 title: createProductInput.title,
@@ -24,24 +24,111 @@ export class ProductsService {
                     },
                 },
             },
+            include: {
+                customInputs: true,
+            },
         });
+
+        //@ts-ignore
+        product.createdAt = product.createdAt.toISOString();
+        //@ts-ignore
+        product.updatedAt = product.updatedAt.toISOString();
 
         return product;
     }
 
-    findAll(userId: number) {
-        return `This action returns all products`;
+    async findAll(userId: number) {
+        let products = await this.prisma.client.products.findMany({
+            where: {
+                userId,
+            },
+            include: {
+                customInputs: true,
+            },
+        });
+
+        products.forEach((product) => {
+            //@ts-ignore
+            product.createdAt = product.createdAt.toISOString();
+            //@ts-ignore
+            product.updatedAt = product.updatedAt.toISOString();
+        });
+
+        return products;
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} product`;
+    async findOne(id: number) {
+        let product = await this.prisma.client.products.findUnique({
+            where: {
+                id: id,
+            },
+            include: {
+                customInputs: true,
+            },
+        });
+
+        //@ts-ignore
+        product.createdAt = product.createdAt.toISOString();
+        //@ts-ignore
+        product.updatedAt = product.updatedAt.toISOString();
+
+        return product;
     }
 
-    update(id: number, updateProductInput: UpdateProductInput) {
-        return `This action updates a #${id} product`;
+    async update(id: number, updateProductInput: UpdateProductInput) {
+        var { customInputs, ...rest } = updateProductInput;
+
+        if (customInputs) {
+            var product = await this.prisma.client.products.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    ...rest,
+                    customInputs: {
+                        deleteMany: {
+                            id: {
+                                notIn: customInputs.map((input) => input.id),
+                            },
+                        },
+                        createMany: {
+                            data: customInputs,
+                        },
+                    },
+                },
+                include: {
+                    customInputs: true,
+                },
+            });
+        } else {
+            var product = await this.prisma.client.products.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    ...rest,
+                },
+                include: {
+                    customInputs: true,
+                },
+            });
+        }
+
+        //@ts-ignore
+        product.createdAt = product.createdAt.toISOString();
+        //@ts-ignore
+        product.updatedAt = product.updatedAt.toISOString();
+
+        return product;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} product`;
+    async remove(id: number) {
+        await this.prisma.client.products.delete({
+            where: {
+                id: id,
+            },
+        });
+
+        return true;
     }
 }

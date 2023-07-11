@@ -1,8 +1,8 @@
 type State {
     id: Int!
     name: String
-    createdAt: DateTime
-    updatedAt: DateTime
+    createdAt: String
+    updatedAt: String
 }
 
 input CreateStateInput {
@@ -22,5 +22,5 @@ type Query {
 type Mutation {
     createState(createStateInput: CreateStateInput!): State!
     updateState(updateStateInput: UpdateStateInput!): State!
-    removeState(id: Int!): State
+    removeState(id: Int!): Boolean
 }

@@ -1,3 +1,13 @@
+input CustomInput {
+    key: String!
+    value: String!
+}
+
+type CustomInputs {
+    key: String!
+    value: String!
+}
+
 type Product {
     id: Int!
     image: String
@@ -7,8 +17,9 @@ type Product {
     price: Float
     stock: Int
     variant: String
-    createdAt: DateTime
-    updatedAt: DateTime
+    createdAt: String
+    updatedAt: String
+    customInputs: [CustomInputs]
 }
 
 input CreateProductInput {
@@ -19,6 +30,7 @@ input CreateProductInput {
     price: Float
     stock: Int
     variant: String
+    customInputs: [CustomInput]
 }
 
 input UpdateProductInput {
@@ -30,6 +42,7 @@ input UpdateProductInput {
     price: Float
     stock: Int
     variant: String
+    customInputs: [CustomInput]
 }
 
 type Query {
@@ -40,5 +53,5 @@ type Query {
 type Mutation {
     createProduct(createProductInput: CreateProductInput!): Product!
     updateProduct(updateProductInput: UpdateProductInput!): Product!
-    removeProduct(id: Int!): Product
+    removeProduct(id: Int!): Boolean
 }

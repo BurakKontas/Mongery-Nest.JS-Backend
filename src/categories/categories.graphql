@@ -1,8 +1,8 @@
 type Category {
     id: Int!
     name: String!
-    createdAt: DateTime
-    updatedAt: DateTime
+    createdAt: String
+    updatedAt: String
 }
 
 input CreateCategoryInput {
@@ -22,5 +22,5 @@ type Query {
 type Mutation {
     createCategory(createCategoryInput: CreateCategoryInput!): Category!
     updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
-    removeCategory(id: Int!): Category
+    removeCategory(id: Int!): Boolean
 }

@@ -7,36 +7,56 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class CategoriesService {
     constructor(private readonly prisma: PrismaService) {}
 
-    create(createCategoryInput: CreateCategoryInput, userId: number) {
-        let category = this.prisma.client.categories.create({
+    async create(createCategoryInput: CreateCategoryInput, userId: number) {
+        let category = await this.prisma.client.categories.create({
             data: {
                 ...createCategoryInput,
+                userId,
             },
         });
+
+        //@ts-ignore
+        category.createdAt = category.createdAt.toISOString();
+        //@ts-ignore
+        category.updatedAt = category.updatedAt.toISOString();
 
         return category;
     }
 
-    findAll(userId: number) {
-        let categories = this.prisma.client.categories.findMany({
+    async findAll(userId: number) {
+        let categories = await this.prisma.client.categories.findMany({
             where: {
                 userId,
             },
         });
+
+        categories.forEach((category) => {
+            //@ts-ignore
+            category.createdAt = category.createdAt.toISOString();
+            //@ts-ignore
+            category.updatedAt = category.updatedAt.toISOString();
+        });
+
         return categories;
     }
 
-    findOne(id: number) {
-        let category = this.prisma.client.categories.findUnique({
+    async findOne(id: number) {
+        let category = await this.prisma.client.categories.findUnique({
             where: {
                 id: id,
             },
         });
+
+        //@ts-ignore
+        category.createdAt = category.createdAt.toISOString();
+        //@ts-ignore
+        category.updatedAt = category.updatedAt.toISOString();
+
         return category;
     }
 
-    update(id: number, updateCategoryInput: UpdateCategoryInput) {
-        let category = this.prisma.client.categories.update({
+    async update(id: number, updateCategoryInput: UpdateCategoryInput) {
+        let category = await this.prisma.client.categories.update({
             where: {
                 id: id,
             },
@@ -44,11 +64,17 @@ export class CategoriesService {
                 ...updateCategoryInput,
             },
         });
+
+        //@ts-ignore
+        category.createdAt = category.createdAt.toISOString();
+        //@ts-ignore
+        category.updatedAt = category.updatedAt.toISOString();
+
         return category;
     }
 
-    remove(id: number) {
-        this.prisma.client.categories.delete({
+    async remove(id: number) {
+        await this.prisma.client.categories.delete({
             where: {
                 id: id,
             },

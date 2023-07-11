@@ -7,37 +7,56 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class CustomersService {
     constructor(private readonly prisma: PrismaService) {}
 
-    create(createCustomerInput: CreateCustomerInput, userId: number) {
-        let customer = this.prisma.client.customers.create({
+    async create(createCustomerInput: CreateCustomerInput, userId: number) {
+        let customer = await this.prisma.client.customers.create({
             data: {
                 ...createCustomerInput,
                 userId: userId,
             },
         });
 
+        //@ts-ignore
+        customer.createdAt = customer.createdAt.toISOString();
+        //@ts-ignore
+        customer.updatedAt = customer.updatedAt.toISOString();
+
         return customer;
     }
 
-    findAll(userId: number) {
-        let customers = this.prisma.client.customers.findMany({
+    async findAll(userId: number) {
+        let customers = await this.prisma.client.customers.findMany({
             where: {
                 userId,
             },
         });
+
+        customers.forEach((customer) => {
+            //@ts-ignore
+            customer.createdAt = customer.createdAt.toISOString();
+            //@ts-ignore
+            customer.updatedAt = customer.updatedAt.toISOString();
+        });
+
         return customers;
     }
 
-    findOne(id: number) {
-        let customer = this.prisma.client.customers.findUnique({
+    async findOne(id: number) {
+        let customer = await this.prisma.client.customers.findUnique({
             where: {
                 id: id,
             },
         });
+
+        //@ts-ignore
+        customer.createdAt = customer.createdAt.toISOString();
+        //@ts-ignore
+        customer.updatedAt = customer.updatedAt.toISOString();
+
         return customer;
     }
 
-    update(id: number, updateCustomerInput: UpdateCustomerInput) {
-        let customer = this.prisma.client.customers.update({
+    async update(id: number, updateCustomerInput: UpdateCustomerInput) {
+        let customer = await this.prisma.client.customers.update({
             where: {
                 id: id,
             },
@@ -45,11 +64,17 @@ export class CustomersService {
                 ...updateCustomerInput,
             },
         });
+
+        //@ts-ignore
+        customer.createdAt = customer.createdAt.toISOString();
+        //@ts-ignore
+        customer.updatedAt = customer.updatedAt.toISOString();
+
         return customer;
     }
 
-    remove(id: number) {
-        this.prisma.client.customers.delete({
+    async remove(id: number) {
+        await this.prisma.client.customers.delete({
             where: {
                 id: id,
             },

@@ -27,14 +27,14 @@ export class AuthService {
     }
 
     async signIn(username: string, password: string) {
-        const user = await this.usersService.findByEmail(username);
+        const user = await this.usersService.findByEmailWithPasswordHash(username);
         if (!user || !(await CrypterService.comparePassword(password, user.passwordHash))) {
             throw new UnauthorizedException("Invalid credentials");
         }
 
         const payload = structuredClone(user);
         delete payload.passwordHash;
-
+        
         return {
             access_token: await this.jwtService.signAsync(payload),
         };

@@ -1,4 +1,4 @@
-import { CanActivate, createParamDecorator, ExecutionContext, UnauthorizedException } from "@nestjs/common";
+import { CanActivate, createParamDecorator, ExecutionContext, Inject, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { GqlExecutionContext } from "@nestjs/graphql";
 import { JwtService } from "@nestjs/jwt";
@@ -6,14 +6,19 @@ import { ExtractTokenFromHeader } from "src/helpers/extractTokenFromHeader";
 import { PrismaService } from "src/prisma/prisma.service";
 import { AuthRoles } from "src/users/enums/AuthRoles";
 
-export class CheckUser implements CanActivate {
-    constructor(private reflector: Reflector, private jwtService: JwtService, private readonly prisma: PrismaService) {}
+export class CheckUserGuard implements CanActivate {
+    constructor(
+        @Inject(Reflector)
+        private readonly reflector: Reflector,
+        private jwtService: JwtService,
+        private readonly prisma: PrismaService
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const params = this.reflector.get<string[]>("check-user", context.getHandler());
+        if (!params) return true;
         const modelName = params[0];
         const modelParameter = params[1] || "id";
-        if (!modelName) return true;
 
         const gqlContext = GqlExecutionContext.create(context);
         const { req } = gqlContext.getContext();
@@ -25,10 +30,19 @@ export class CheckUser implements CanActivate {
 
         const userRole = payload.role;
 
-        if (userRole == AuthRoles.ADMIN) return true;
+        // if (userRole == AuthRoles.ADMIN) return true;
 
-        const requestedId = gqlContext.getArgs()[modelParameter];
+        let requestedId = gqlContext.getArgs()[modelParameter];
         const resolverName = gqlContext.getHandler().name;
+
+        if (!requestedId) {
+            let keys = Object.keys(gqlContext.getArgs());
+            if (keys.length > 0) {
+                requestedId = gqlContext.getArgs()[keys[0]][modelParameter];
+            } else {
+                throw new Error(`No id provided in ${resolverName}.`);
+            }
+        }
 
         if (!requestedId) throw new Error(`No id provided in ${resolverName}.`);
 

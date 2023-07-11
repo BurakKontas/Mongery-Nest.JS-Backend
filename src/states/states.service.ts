@@ -7,36 +7,56 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class StatesService {
     constructor(private readonly prisma: PrismaService) {}
 
-    create(createStateInput: CreateStateInput, userId: number) {
-        let state = this.prisma.client.states.create({
+    async create(createStateInput: CreateStateInput, userId: number) {
+        let state = await this.prisma.client.states.create({
             data: {
                 ...createStateInput,
+                userId,
             },
         });
+
+        //@ts-ignore
+        state.createdAt = state.createdAt.toISOString();
+        //@ts-ignore
+        state.updatedAt = state.updatedAt.toISOString();
 
         return state;
     }
 
-    findAll(userId: number) {
-        let states = this.prisma.client.states.findMany({
+    async findAll(userId: number) {
+        let states = await this.prisma.client.states.findMany({
             where: {
                 userId,
             },
         });
+
+        states.forEach((state) => {
+            //@ts-ignore
+            state.createdAt = state.createdAt.toISOString();
+            //@ts-ignore
+            state.updatedAt = state.updatedAt.toISOString();
+        });
+
         return states;
     }
 
-    findOne(id: number) {
-        let state = this.prisma.client.states.findUnique({
+    async findOne(id: number) {
+        let state = await this.prisma.client.states.findUnique({
             where: {
                 id: id,
             },
         });
+
+        //@ts-ignore
+        state.createdAt = state.createdAt.toISOString();
+        //@ts-ignore
+        state.updatedAt = state.updatedAt.toISOString();
+
         return state;
     }
 
-    update(id: number, updateStateInput: UpdateStateInput) {
-        let state = this.prisma.client.states.update({
+    async update(id: number, updateStateInput: UpdateStateInput) {
+        let state = await this.prisma.client.states.update({
             where: {
                 id: id,
             },
@@ -44,13 +64,19 @@ export class StatesService {
                 ...updateStateInput,
             },
         });
+
+        //@ts-ignore
+        state.createdAt = state.createdAt.toISOString();
+        //@ts-ignore
+        state.updatedAt = state.updatedAt.toISOString();
+
         return state;
     }
 
-    remove(id: number) {
-        this.prisma.client.states.delete({
+    async remove(id: number) {
+        await this.prisma.client.states.delete({
             where: {
-                id: id,
+                id,
             },
         });
         return true;

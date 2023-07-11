@@ -5,6 +5,7 @@ import { AuthController } from "./auth.controller";
 import { jwtConstants } from "./constants";
 import { UsersModule } from "../users/users.module";
 import { UsersService } from "src/users/users.service";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Module({
     imports: [
@@ -15,7 +16,7 @@ import { UsersService } from "src/users/users.service";
             signOptions: { expiresIn: jwtConstants.expiresIn },
         }),
     ],
-    providers: [AuthService, UsersService],
+    providers: [AuthService, UsersService, PrismaService],
     controllers: [AuthController],
     exports: [AuthService],
 })

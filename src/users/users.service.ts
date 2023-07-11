@@ -7,7 +7,6 @@ import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class UsersService {
-
     constructor(private readonly prisma: PrismaService) {}
 
     async create(createUserInput: CreateUserInput): Promise<Partial<Users>> {
@@ -29,16 +28,22 @@ export class UsersService {
 
         var result = structuredClone(user);
         delete result.passwordHash;
-
         return result;
     }
 
     async findAll(): Promise<Users[]> {
         let results = (await this.prisma.client.users.findMany()).map((user) => {
             let result = structuredClone(user);
+
+            //@ts-ignore
+            result.createdAt = result.createdAt.toISOString();
+            //@ts-ignore
+            result.updatedAt = result.updatedAt.toISOString();
+
             delete result.passwordHash;
             return result;
         });
+        console.log(results);
         return results;
     }
 
@@ -51,6 +56,19 @@ export class UsersService {
         if (user) {
             let result = structuredClone(user);
             delete result.passwordHash;
+            return result;
+        }
+        return null;
+    }
+
+    async findByEmailWithPasswordHash(email: string): Promise<Users> {
+        let user = await this.prisma.client.users.findUnique({
+            where: {
+                email: email,
+            },
+        });
+        if (user) {
+            let result = structuredClone(user);
             return result;
         }
         return null;

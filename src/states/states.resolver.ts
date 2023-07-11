@@ -9,7 +9,9 @@ import { Roles } from "src/roles/roles.decorator";
 import { AuthRoles } from "src/users/enums/AuthRoles";
 import { UserId } from "src/get-user/get-user.decorator";
 import { CheckUser } from "src/check-user/check-user.decorator";
+import { CheckUserGuard } from "src/check-user/check-user.guard";
 
+@UseGuards(CheckUserGuard)
 @UseGuards(AuthGuard)
 @UseGuards(RolesGuard)
 @Roles(AuthRoles.USER, AuthRoles.ADMIN)
