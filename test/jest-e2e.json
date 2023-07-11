@@ -1,9 +1,21 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@minio/minio/(.*)": "<rootDir>/../libs/minio/src/$1",
+    "@minio/minio": "<rootDir>/../libs/minio/src",
+    "@postgres/postgres/(.*)": "<rootDir>/../libs/postgres/src/$1",
+    "@postgres/postgres": "<rootDir>/../libs/postgres/src",
+    "@crypter/crypter/(.*)": "<rootDir>/../libs/crypter/src/$1",
+    "@crypter/crypter": "<rootDir>/../libs/crypter/src"
   }
 }

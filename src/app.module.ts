@@ -6,6 +6,8 @@ import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { JwtModule } from "@nestjs/jwt"; // Import JwtModule
+import { CrypterModule } from "@crypter/crypter";
+import { MinioModule } from "@minio/minio";
 
 @Module({
     imports: [
@@ -17,7 +19,9 @@ import { JwtModule } from "@nestjs/jwt"; // Import JwtModule
         }),
         AuthModule,
         UsersModule,
-        JwtModule, // Add JwtModule here
+        JwtModule,
+        CrypterModule,
+        MinioModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -2,6 +2,7 @@ import { Injectable, ConflictException, UnauthorizedException } from "@nestjs/co
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserInput } from "src/users/dto/create-user.input";
+import { CrypterService } from "@crypter/crypter";
 
 @Injectable()
 export class AuthService {
@@ -16,9 +17,10 @@ export class AuthService {
         }
 
         const user = await this.usersService.create(createUserDto);
-        delete user.passwordHash;
 
-        const payload = user;
+        const payload = structuredClone(user);
+        delete payload.passwordHash;
+
         return {
             access_token: await this.jwtService.signAsync(payload),
         };
@@ -26,12 +28,13 @@ export class AuthService {
 
     async signIn(username: string, password: string) {
         const user = await this.usersService.findByEmail(username);
-        if (!user || user.passwordHash !== password) {
+        if (!user || !(await CrypterService.comparePassword(password, user.passwordHash))) {
             throw new UnauthorizedException("Invalid credentials");
         }
 
-        delete user.passwordHash;
-        const payload = user;
+        const payload = structuredClone(user);
+        delete payload.passwordHash;
+
         return {
             access_token: await this.jwtService.signAsync(payload),
         };

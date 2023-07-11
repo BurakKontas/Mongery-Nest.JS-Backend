@@ -23,7 +23,6 @@ export class RolesGuard implements CanActivate {
         const payload = this.jwtService.verify(token);
 
         const userRole = payload.role;
-        console.log(userRole, roles);
 
         if (!userRole || !roles.includes(userRole)) {
             throw new UnauthorizedException("Access denied");

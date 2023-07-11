@@ -1,5 +1,37 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "src",
+  "projects": {
+    "minio": {
+      "type": "library",
+      "root": "libs/minio",
+      "entryFile": "index",
+      "sourceRoot": "libs/minio/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/minio/tsconfig.lib.json"
+      }
+    },
+    "postgres": {
+      "type": "library",
+      "root": "libs/postgres",
+      "entryFile": "index",
+      "sourceRoot": "libs/postgres/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/postgres/tsconfig.lib.json"
+      }
+    },
+    "crypter": {
+      "type": "library",
+      "root": "libs/crypter",
+      "entryFile": "index",
+      "sourceRoot": "libs/crypter/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/crypter/tsconfig.lib.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true
+  }
 }

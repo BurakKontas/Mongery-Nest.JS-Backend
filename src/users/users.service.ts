@@ -2,68 +2,87 @@ import { Injectable } from "@nestjs/common";
 import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { User } from "./entities/user.entity";
-import { AuthRoles } from "./enums/AuthRoles";
+import { PrismaClient } from "@prisma/client";
+import { CrypterService } from "@crypter/crypter";
 
 @Injectable()
 export class UsersService {
-    private readonly users: User[] = [
-        {
-            id: 1,
-            name: "John Doe",
-            email: "john@example.com",
-            passwordHash: "changeme",
-            role: AuthRoles.ADMIN,
-        },
-        {
-            id: 2,
-            name: "Jane Smith",
-            email: "jane@example.com",
-            passwordHash: "changeme",
-            role: AuthRoles.USER,
-        },
-    ];
+    private readonly prisma: PrismaClient;
 
-    create(createUserInput: CreateUserInput): User {
+    constructor() {
+        this.prisma = new PrismaClient();
+    }
+
+    async create(createUserInput: CreateUserInput): Promise<User> {
+        const hash = await CrypterService.hashPassword(createUserInput.password);
         const newUser: User = {
-            id: this.users.length + 1,
             name: createUserInput.name,
             email: createUserInput.email,
-            // passwordHash: hash(createUserInput.password)
-            passwordHash: createUserInput.password,
+            passwordHash: hash,
             role: createUserInput.role,
         };
-        this.users.push(newUser);
-        return newUser;
+        const user = await this.prisma.users.create({
+            data: {
+                name: newUser.name,
+                role: newUser.role,
+                email: newUser.email,
+                passwordHash: newUser.passwordHash,
+            },
+        });
+        return User.fromPrisma(user);
     }
 
-    findAll(): User[] {
-        return this.users;
+    async findAll(): Promise<User[]> {
+        let results = (await this.prisma.users.findMany()).map((user) => User.fromPrisma(user));
+        return results;
     }
 
-    findByEmail(email: string): User {
-        return this.users.find((user) => user.email === email);
-    }
-
-    findOne(id: number): User {
-        return this.users.find((user) => user.id === id);
-    }
-
-    update(id: number, updateUserInput: UpdateUserInput): User {
-        const user = this.findOne(id);
+    async findByEmail(email: string): Promise<User> {
+        let user = await this.prisma.users.findUnique({
+            where: {
+                email: email,
+            },
+        });
         if (user) {
-            user.name = updateUserInput.name;
-            user.email = updateUserInput.email;
-            user.role = updateUserInput.role;
+            return User.fromPrisma(user);
         }
-        return user;
+        return null;
     }
 
-    remove(id: number): boolean {
-        const index = this.users.findIndex((user) => user.id === id);
-        if (index !== -1) {
-            this.users.splice(index, 1)[0];
-            return true;
+    async findOne(id: number): Promise<User> {
+        let user = await this.prisma.users.findUnique({
+            where: {
+                id: id,
+            },
+        });
+        if (user) {
+            return User.fromPrisma(user);
         }
-        return false;
+        return null;
+    }
+
+    async update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
+        let user = await this.prisma.users.update({
+            where: {
+                id: id,
+            },
+            data: {
+                name: updateUserInput.name,
+                email: updateUserInput.email,
+                role: updateUserInput.role,
+            },
+        });
+
+        return User.fromPrisma(user);
+    }
+
+    async remove(id: number): Promise<boolean> {
+        await this.prisma.users.delete({
+            where: {
+                id: id,
+            },
+        });
+
+        return true;
     }
 }

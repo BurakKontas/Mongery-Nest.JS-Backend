@@ -16,6 +16,26 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@minio/minio": [
+        "libs/minio/src"
+      ],
+      "@minio/minio/*": [
+        "libs/minio/src/*"
+      ],
+      "@postgres/postgres": [
+        "libs/postgres/src"
+      ],
+      "@postgres/postgres/*": [
+        "libs/postgres/src/*"
+      ],
+      "@crypter/crypter": [
+        "libs/crypter/src"
+      ],
+      "@crypter/crypter/*": [
+        "libs/crypter/src/*"
+      ]
+    }
   }
 }
