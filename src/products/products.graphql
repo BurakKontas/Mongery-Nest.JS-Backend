@@ -13,9 +13,9 @@ type Product {
 
 input CreateProductInput {
     image: String
-    title: String
-    stateId: Int
-    categoryId: Int
+    title: String!
+    stateId: Int!
+    categoryId: Int!
     price: Float
     stock: Int
     variant: String
