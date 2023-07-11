@@ -12,6 +12,7 @@ import { CustomersModule } from './customers/customers.module';
 import { ProductsModule } from './products/products.module';
 import { StatesModule } from './states/states.module';
 import { CategoriesModule } from './categories/categories.module';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
     imports: [
@@ -32,6 +33,6 @@ import { CategoriesModule } from './categories/categories.module';
         CategoriesModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, PrismaService],
 })
 export class AppModule {}

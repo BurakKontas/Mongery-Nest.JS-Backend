@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCustomerInput } from './dto/create-customer.input';
-import { UpdateCustomerInput } from './dto/update-customer.input';
+import { Injectable } from "@nestjs/common";
+import { CreateCustomerInput } from "./dto/create-customer.input";
+import { UpdateCustomerInput } from "./dto/update-customer.input";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class CustomersService {
-  create(createCustomerInput: CreateCustomerInput) {
-    return 'This action adds a new customer';
-  }
+    constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all customers`;
-  }
+    create(createCustomerInput: CreateCustomerInput, userId: number) {
+        let customer = this.prisma.client.customers.create({
+            data: {
+                ...createCustomerInput,
+                userId: userId,
+            },
+        });
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
-  }
+        return customer;
+    }
 
-  update(id: number, updateCustomerInput: UpdateCustomerInput) {
-    return `This action updates a #${id} customer`;
-  }
+    findAll(userId: number) {
+        let customers = this.prisma.client.customers.findMany({
+            where: {
+                userId,
+            },
+        });
+        return customers;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
-  }
+    findOne(id: number) {
+        let customer = this.prisma.client.customers.findUnique({
+            where: {
+                id: id,
+            },
+        });
+        return customer;
+    }
+
+    update(id: number, updateCustomerInput: UpdateCustomerInput) {
+        let customer = this.prisma.client.customers.update({
+            where: {
+                id: id,
+            },
+            data: {
+                ...updateCustomerInput,
+            },
+        });
+        return customer;
+    }
+
+    remove(id: number) {
+        this.prisma.client.customers.delete({
+            where: {
+                id: id,
+            },
+        });
+        return true;
+    }
 }

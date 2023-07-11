@@ -3,14 +3,12 @@ import { CreateUserInput } from "./dto/create-user.input";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { PrismaClient, Users } from "@prisma/client";
 import { CrypterService } from "@crypter/crypter";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class UsersService {
-    private readonly prisma: PrismaClient;
 
-    constructor() {
-        this.prisma = new PrismaClient();
-    }
+    constructor(private readonly prisma: PrismaService) {}
 
     async create(createUserInput: CreateUserInput): Promise<Partial<Users>> {
         const hash = await CrypterService.hashPassword(createUserInput.password);
@@ -20,7 +18,7 @@ export class UsersService {
             passwordHash: hash,
             role: createUserInput.role,
         };
-        const user = await this.prisma.users.create({
+        const user = await this.prisma.client.users.create({
             data: {
                 name: newUser.name,
                 role: newUser.role,
@@ -36,7 +34,7 @@ export class UsersService {
     }
 
     async findAll(): Promise<Users[]> {
-        let results = (await this.prisma.users.findMany()).map((user) => {
+        let results = (await this.prisma.client.users.findMany()).map((user) => {
             let result = structuredClone(user);
             delete result.passwordHash;
             return result;
@@ -45,7 +43,7 @@ export class UsersService {
     }
 
     async findByEmail(email: string): Promise<Users> {
-        let user = await this.prisma.users.findUnique({
+        let user = await this.prisma.client.users.findUnique({
             where: {
                 email: email,
             },
@@ -59,7 +57,7 @@ export class UsersService {
     }
 
     async findOne(id: number): Promise<Users> {
-        let user = await this.prisma.users.findUnique({
+        let user = await this.prisma.client.users.findUnique({
             where: {
                 id: id,
             },
@@ -73,7 +71,7 @@ export class UsersService {
     }
 
     async update(id: number, updateUserInput: UpdateUserInput): Promise<Users> {
-        let user = await this.prisma.users.update({
+        let user = await this.prisma.client.users.update({
             where: {
                 id: id,
             },
@@ -88,7 +86,7 @@ export class UsersService {
     }
 
     async remove(id: number): Promise<boolean> {
-        await this.prisma.users.delete({
+        await this.prisma.client.users.delete({
             where: {
                 id: id,
             },

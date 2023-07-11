@@ -2,6 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, BadRe
 import { GqlExecutionContext } from "@nestjs/graphql";
 import { JwtService } from "@nestjs/jwt";
 import { jwtConstants } from "./constants";
+import { ExtractTokenFromHeader } from "src/helpers/extractTokenFromHeader";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -10,7 +11,7 @@ export class AuthGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const gqlContext = GqlExecutionContext.create(context);
         const { req } = gqlContext.getContext();
-        const token = this.extractTokenFromHeader(req);
+        const token = ExtractTokenFromHeader(req);
         if (!token) {
             throw new UnauthorizedException();
         }
@@ -23,17 +24,5 @@ export class AuthGuard implements CanActivate {
             throw new UnauthorizedException();
         }
         return true;
-    }
-
-    private extractTokenFromHeader(request: any): string | undefined {
-        try {
-            const authorization = request.headers.authorization;
-            if (authorization && authorization.split(" ")[0] === "Bearer") {
-                return authorization.split(" ")[1];
-            }
-            return undefined;
-        } catch {
-            throw new BadRequestException();
-        }
     }
 }

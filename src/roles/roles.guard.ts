@@ -3,6 +3,7 @@ import { Reflector } from "@nestjs/core";
 import { AuthRoles } from "src/users/enums/AuthRoles";
 import { JwtService } from "@nestjs/jwt";
 import { GqlExecutionContext } from "@nestjs/graphql";
+import { ExtractTokenFromHeader } from "src/helpers/extractTokenFromHeader";
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -15,7 +16,7 @@ export class RolesGuard implements CanActivate {
         }
         const gqlContext = GqlExecutionContext.create(context);
         const { req } = gqlContext.getContext();
-        const token = this.extractTokenFromHeader(req);
+        const token = ExtractTokenFromHeader(req);
         if (!token) {
             throw new UnauthorizedException("Access denied");
         }
@@ -29,13 +30,5 @@ export class RolesGuard implements CanActivate {
         }
 
         return true;
-    }
-
-    private extractTokenFromHeader(request: any): string | undefined {
-        const authorization = request.headers.authorization;
-        if (authorization && authorization.split(" ")[0] === "Bearer") {
-            return authorization.split(" ")[1];
-        }
-        return undefined;
     }
 }

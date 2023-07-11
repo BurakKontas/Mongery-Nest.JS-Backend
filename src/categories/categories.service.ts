@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCategoryInput } from './dto/create-category.input';
-import { UpdateCategoryInput } from './dto/update-category.input';
+import { Injectable } from "@nestjs/common";
+import { CreateCategoryInput } from "./dto/create-category.input";
+import { UpdateCategoryInput } from "./dto/update-category.input";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryInput: CreateCategoryInput) {
-    return 'This action adds a new category';
-  }
+    constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all categories`;
-  }
+    create(createCategoryInput: CreateCategoryInput, userId: number) {
+        let category = this.prisma.client.categories.create({
+            data: {
+                ...createCategoryInput,
+            },
+        });
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
+        return category;
+    }
 
-  update(id: number, updateCategoryInput: UpdateCategoryInput) {
-    return `This action updates a #${id} category`;
-  }
+    findAll(userId: number) {
+        let categories = this.prisma.client.categories.findMany({
+            where: {
+                userId,
+            },
+        });
+        return categories;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
-  }
+    findOne(id: number) {
+        let category = this.prisma.client.categories.findUnique({
+            where: {
+                id: id,
+            },
+        });
+        return category;
+    }
+
+    update(id: number, updateCategoryInput: UpdateCategoryInput) {
+        let category = this.prisma.client.categories.update({
+            where: {
+                id: id,
+            },
+            data: {
+                ...updateCategoryInput,
+            },
+        });
+        return category;
+    }
+
+    remove(id: number) {
+        this.prisma.client.categories.delete({
+            where: {
+                id: id,
+            },
+        });
+        return true;
+    }
 }
