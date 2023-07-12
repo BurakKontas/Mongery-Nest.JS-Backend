@@ -10,6 +10,9 @@ module.exports = {
             max_memory_restart: "1G",
             env: {
                 NODE_ENV: "production",
+                HTTPS: "true",
+                SSL_CRT_FILE: "../certs/certificate.crt",
+                SSL_KEY_FILE: "../certs/private.key",
             },
         },
     ],
