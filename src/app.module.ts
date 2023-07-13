@@ -42,6 +42,6 @@ import { LoggingMiddleware } from "./logging/logging.middleware";
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer.apply(RateLimitMiddleware).forRoutes("*"); // öncelikle ratelimit geldiği için 429 lar aşağıdaki loglarda görünmeyecek
-        // consumer.apply(LoggingMiddleware).forRoutes("*"); // tüm isteklerin loglanması için
+        consumer.apply(LoggingMiddleware).forRoutes("*"); // tüm isteklerin loglanması için
     }
 }
