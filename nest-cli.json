@@ -1,28 +1,37 @@
 {
-    "$schema": "https://json.schemastore.org/nest-cli",
-    "collection": "@nestjs/schematics",
-    "sourceRoot": "src",
-    "projects": {
-        "minio": {
-            "type": "library",
-            "root": "libs/minio",
-            "entryFile": "index",
-            "sourceRoot": "libs/minio/src",
-            "compilerOptions": {
-                "tsConfigPath": "libs/minio/tsconfig.lib.json"
-            }
-        },
-        "crypter": {
-            "type": "library",
-            "root": "libs/crypter",
-            "entryFile": "index",
-            "sourceRoot": "libs/crypter/src",
-            "compilerOptions": {
-                "tsConfigPath": "libs/crypter/tsconfig.lib.json"
-            }
-        }
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "projects": {
+    "minio": {
+      "type": "library",
+      "root": "libs/minio",
+      "entryFile": "index",
+      "sourceRoot": "libs/minio/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/minio/tsconfig.lib.json"
+      }
     },
-    "compilerOptions": {
-        "webpack": false
+    "crypter": {
+      "type": "library",
+      "root": "libs/crypter",
+      "entryFile": "index",
+      "sourceRoot": "libs/crypter/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/crypter/tsconfig.lib.json"
+      }
+    },
+    "redis": {
+      "type": "library",
+      "root": "libs/redis",
+      "entryFile": "index",
+      "sourceRoot": "libs/redis/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/redis/tsconfig.lib.json"
+      }
     }
+  },
+  "compilerOptions": {
+    "webpack": false
+  }
 }

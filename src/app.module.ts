@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { GraphQLModule } from "@nestjs/graphql";
@@ -13,6 +13,8 @@ import { ProductsModule } from "./products/products.module";
 import { StatesModule } from "./states/states.module";
 import { CategoriesModule } from "./categories/categories.module";
 import { PrismaService } from "./prisma/prisma.service";
+import { RedisModule } from "@redis/redis";
+import { RateLimitMiddleware } from "./rate-limit/rate-limit.middleware";
 
 @Module({
     imports: [
@@ -31,8 +33,13 @@ import { PrismaService } from "./prisma/prisma.service";
         ProductsModule,
         StatesModule,
         CategoriesModule,
+        RedisModule,
     ],
     controllers: [AppController],
     providers: [AppService, PrismaService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(RateLimitMiddleware).forRoutes("*");
+    }
+}

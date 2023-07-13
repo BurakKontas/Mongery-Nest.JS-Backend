@@ -35,6 +35,12 @@
       ],
       "@crypter/crypter/*": [
         "libs/crypter/src/*"
+      ],
+      "@redis/redis": [
+        "libs/redis/src"
+      ],
+      "@redis/redis/*": [
+        "libs/redis/src/*"
       ]
     }
   }
