@@ -3,6 +3,7 @@ import { AppModule } from "./app.module";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
+import { GlobalExceptionFilter } from "./global-exception/global-exception.filter";
 
 async function bootstrap() {
     dotenv.config();
@@ -17,6 +18,8 @@ async function bootstrap() {
     app.enableCors({
         origin: ["*"], // TODO: Change this to the actual origin
     });
+
+    // app.useGlobalFilters(new GlobalExceptionFilter()); // Global exception filter
     await app.listen(5050);
 }
 bootstrap();

@@ -30,10 +30,11 @@ model Customers {
   id          Int      @id @default(autoincrement())
   name        String
   email       String   @unique
-  phone       String
+  phone       String?
   firmName    String
-  avatar      String // guid tutulacak burada o guid yi minio dan eşleştiricez // default avatar eklenecek
+  avatar      String? // guid tutulacak burada o guid yi minio dan eşleştiricez // default avatar eklenecek
   description String?
+  address     String?
   userId      Int
   user        Users    @relation(fields: [userId], references: [id], name: "customer-user", onDelete: Cascade)
   createdAt   DateTime @default(now())

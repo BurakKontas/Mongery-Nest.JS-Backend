@@ -15,6 +15,7 @@ import { CategoriesModule } from "./categories/categories.module";
 import { PrismaService } from "./prisma/prisma.service";
 import { RedisModule } from "@redis/redis";
 import { RateLimitMiddleware } from "./rate-limit/rate-limit.middleware";
+import { LoggingMiddleware } from "./logging/logging.middleware";
 
 @Module({
     imports: [
@@ -40,6 +41,7 @@ import { RateLimitMiddleware } from "./rate-limit/rate-limit.middleware";
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(RateLimitMiddleware).forRoutes("*");
+        consumer.apply(RateLimitMiddleware).forRoutes("*"); // öncelikle ratelimit geldiği için 429 lar aşağıdaki loglarda görünmeyecek
+        // consumer.apply(LoggingMiddleware).forRoutes("*"); // tüm isteklerin loglanması için
     }
 }

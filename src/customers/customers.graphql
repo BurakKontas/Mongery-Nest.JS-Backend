@@ -6,6 +6,7 @@ type Customer {
     firmName: String
     avatar: String
     description: String
+    address: String
     createdAt: String
     updatedAt: String
 }
@@ -16,6 +17,7 @@ input CreateCustomerInput {
     phone: String
     firmName: String!
     avatar: String
+    address: String
     description: String
 }
 
@@ -26,6 +28,7 @@ input UpdateCustomerInput {
     phone: String
     firmName: String
     avatar: String
+    address: String
     description: String
 }
 
