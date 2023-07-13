@@ -26,6 +26,15 @@ export class AuthService {
         };
     }
 
+    async verifyToken(token: string) {
+        try {
+            await this.jwtService.verifyAsync(token);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
     async signIn(username: string, password: string) {
         const user = await this.usersService.findByEmailWithPasswordHash(username);
         if (!user || !(await CrypterService.comparePassword(password, user.passwordHash))) {
@@ -34,7 +43,7 @@ export class AuthService {
 
         const payload = structuredClone(user);
         delete payload.passwordHash;
-        
+
         return {
             access_token: await this.jwtService.signAsync(payload),
         };
