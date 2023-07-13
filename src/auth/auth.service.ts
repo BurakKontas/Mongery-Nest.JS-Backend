@@ -3,6 +3,7 @@ import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 import { CreateUserInput } from "src/users/dto/create-user.input";
 import { CrypterService } from "@crypter/crypter";
+import { ExtractTokenFromHeader } from "src/helpers/extractTokenFromHeader";
 
 @Injectable()
 export class AuthService {
@@ -26,11 +27,14 @@ export class AuthService {
         };
     }
 
-    async verifyToken(token: string) {
+    async verifyToken(bearer: string) {
         try {
+            let [type, token] = bearer.split(" ");
+            if (type.toLowerCase() !== "bearer") return false;
             await this.jwtService.verifyAsync(token);
             return true;
         } catch (error) {
+            console.log(error);
             return false;
         }
     }
