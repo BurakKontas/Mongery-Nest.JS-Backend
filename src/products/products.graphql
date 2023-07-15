@@ -12,7 +12,6 @@ type Product {
     id: Int!
     image: String
     title: String
-    stateId: Int
     categoryId: Int
     price: Float
     stock: Int
@@ -25,7 +24,6 @@ type Product {
 input CreateProductInput {
     image: String
     title: String!
-    stateId: Int!
     categoryId: Int!
     price: Float
     stock: Int
@@ -37,7 +35,6 @@ input UpdateProductInput {
     id: Int!
     image: String
     title: String
-    stateId: Int
     categoryId: Int
     price: Float
     stock: Int

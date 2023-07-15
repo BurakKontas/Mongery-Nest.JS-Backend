@@ -22,6 +22,7 @@ model Users {
   Products     Products[]   @relation("product-user")
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+  Orders       Orders[]     @relation("order-user")
 
   @@index([email])
 }
@@ -39,6 +40,7 @@ model Customers {
   user        Users    @relation(fields: [userId], references: [id], name: "customer-user", onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  Orders      Orders[] @relation("order-customer")
 
   @@index([userId])
 }
@@ -51,18 +53,19 @@ model Categories {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   Products  Products[] @relation("product-category")
+  Orders    Orders[]   @relation("order-category")
 
   @@index([userId])
 }
 
 model States {
-  id        Int        @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   userId    Int
-  user      Users      @relation(fields: [userId], references: [id], name: "state-user", onDelete: Cascade)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  Products  Products[] @relation("product-state")
+  user      Users    @relation(fields: [userId], references: [id], name: "state-user", onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Orders    Orders[] @relation("order-state")
 
   @@index([userId])
 }
@@ -83,8 +86,6 @@ model Products {
   id           Int            @id @default(autoincrement())
   image        String
   title        String
-  stateId      Int
-  state        States         @relation(fields: [stateId], references: [id], name: "product-state")
   categoryId   Int
   category     Categories     @relation(fields: [categoryId], references: [id], name: "product-category", onDelete: Cascade)
   price        Float
@@ -95,6 +96,27 @@ model Products {
   user         Users          @relation(fields: [userId], references: [id], name: "product-user", onDelete: Cascade)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  Orders       Orders[]       @relation("order-product")
 
   @@index([userId])
+}
+
+model Orders {
+  id         Int        @id @default(autoincrement())
+  image      String
+  title      String
+  categoryId Int
+  category   Categories @relation(fields: [categoryId], references: [id], name: "order-category")
+  stateId    Int
+  state      States     @relation(fields: [stateId], references: [id], name: "order-state")
+  shortDesc  String
+  price      Float
+  quantity   Int
+  variant    String
+  productId  Int
+  product    Products   @relation(fields: [productId], references: [id], name: "order-product", onDelete: Cascade)
+  customerId Int
+  customer   Customers  @relation(fields: [customerId], references: [id], name: "order-customer", onDelete: Cascade)
+  userId     Int
+  user       Users      @relation(fields: [userId], references: [id], name: "order-user", onDelete: Cascade)
 }

@@ -35,6 +35,8 @@ export class ProductsResolver {
         return this.productsService.findOne(id);
     }
 
+    @CheckUser("categories", " categoryId")
+    @CheckUser("states", " stateId")
     @CheckUser("products")
     @Mutation("updateProduct")
     update(@Args("updateProductInput") updateProductInput: UpdateProductInput) {

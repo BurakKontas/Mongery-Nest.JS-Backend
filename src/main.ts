@@ -16,10 +16,10 @@ async function bootstrap() {
         // },
     });
     app.enableCors({
-        origin: ["*"], // TODO: Change this to the actual origin
+        origin: "*", // TODO: Change this to the actual origin
     });
 
-    // app.useGlobalFilters(new GlobalExceptionFilter()); // Global exception filter
+    app.useGlobalFilters(new GlobalExceptionFilter()); // Global exception filter
     await app.listen(5050);
 }
 bootstrap();

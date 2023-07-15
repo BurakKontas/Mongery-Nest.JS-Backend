@@ -21,7 +21,8 @@ export class RateLimitMiddleware implements NestMiddleware {
     async use(req: Request, res: Response, next: NextFunction) {
         const ip = req.ip;
         const path = req.originalUrl;
-        const key = `rate-limit:${ip}-${path}`;
+        const auth = req.headers.authorization || "";
+        const key = `rate-limit:${ip}-${path}-${auth}`;
         const rateLimit = this.findRateLimitConfig(path);
         if (rateLimit === undefined) {
             next();

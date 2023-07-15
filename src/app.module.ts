@@ -16,6 +16,7 @@ import { PrismaService } from "./prisma/prisma.service";
 import { RedisModule } from "@redis/redis";
 import { RateLimitMiddleware } from "./rate-limit/rate-limit.middleware";
 import { LoggingMiddleware } from "./logging/logging.middleware";
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
     imports: [
@@ -35,6 +36,7 @@ import { LoggingMiddleware } from "./logging/logging.middleware";
         StatesModule,
         CategoriesModule,
         RedisModule,
+        OrdersModule,
     ],
     controllers: [AppController],
     providers: [AppService, PrismaService],
