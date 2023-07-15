@@ -18,7 +18,6 @@ export class ProductsResolver {
     constructor(private readonly productsService: ProductsService) {}
 
     @CheckUser("categories", " categoryId")
-    @CheckUser("states", " stateId")
     @Mutation("createProduct")
     create(@Args("createProductInput") createProductInput: CreateProductInput, @UserId() userId: number) {
         return this.productsService.create(createProductInput, userId);
@@ -36,7 +35,6 @@ export class ProductsResolver {
     }
 
     @CheckUser("categories", " categoryId")
-    @CheckUser("states", " stateId")
     @CheckUser("products")
     @Mutation("updateProduct")
     update(@Args("updateProductInput") updateProductInput: UpdateProductInput) {
