@@ -15,6 +15,7 @@ type Product {
     categoryId: Int
     price: Float
     stock: Int
+    description: String
     variant: String
     createdAt: String
     updatedAt: String
@@ -25,6 +26,7 @@ input CreateProductInput {
     image: String
     title: String!
     categoryId: Int!
+    description: String
     price: Float
     stock: Int
     variant: String
@@ -36,6 +38,7 @@ input UpdateProductInput {
     image: String
     title: String
     categoryId: Int
+    description: String
     price: Float
     stock: Int
     variant: String

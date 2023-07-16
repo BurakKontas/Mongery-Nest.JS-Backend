@@ -90,6 +90,7 @@ model Products {
   category     Categories     @relation(fields: [categoryId], references: [id], name: "product-category", onDelete: Cascade)
   price        Float
   stock        Int
+  description  String         @default("")
   variant      String
   customInputs CustomInputs[] @relation("custom-input-product")
   userId       Int

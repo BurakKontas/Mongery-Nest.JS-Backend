@@ -8,24 +8,20 @@ export class ProductsService {
     constructor(private readonly prisma: PrismaService) {}
 
     async create(createProductInput: CreateProductInput, userId: number) {
+        let { customInputs, ...rest } = createProductInput;
         let product = await this.prisma.client.products.create({
             data: {
-                image: createProductInput.image,
-                title: createProductInput.title,
-                price: createProductInput.price,
-                userId: userId,
-                stock: createProductInput.stock,
-                stateId: createProductInput.stateId,
-                categoryId: createProductInput.categoryId,
-                variant: createProductInput.variant,
+                ...rest,
+                userId,
                 customInputs: {
                     createMany: {
-                        data: createProductInput.customInputs,
+                        data: customInputs,
                     },
                 },
             },
             include: {
                 customInputs: true,
+                category: true,
             },
         });
 
