@@ -12,32 +12,61 @@ export class MinioService {
             accessKey: process.env.MINIO_ACCESS_KEY,
             secretKey: process.env.MINIO_SECRET_KEY,
         });
+    }
 
-        this.minioClient.bucketExists(process.env.MINIO_BUCKET_NAME, (err, exists) => {
-            if (err) {
-                return console.log(err);
-            }
-            if (!exists) {
-                return this.minioClient.makeBucket(process.env.MINIO_BUCKET_NAME, "", (err) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                });
-            }
+    private async checkBucketExists(bucketName: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.minioClient.bucketExists(bucketName, (err, exists) => {
+                if (err) {
+                    throw err;
+                }
+                if (!exists) {
+                    resolve(false);
+                } else {
+                    resolve(true);
+                }
+            });
         });
     }
 
-    async uploadFile(file: any, fileName: string) {
+    async createBucket(bucketName: string): Promise<boolean> {
         try {
-            this.minioClient.putObject(process.env.MINIO_BUCKET_NAME, fileName, file.buffer, file.size, file.mimetype);
-            return fileName;
+            return new Promise((resolve, reject) => {
+                this.minioClient.makeBucket(bucketName, "", (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        resolve(true);
+                    }
+                });
+            });
         } catch (err) {
             throw err;
         }
     }
 
-    async getFile(fileName: string) {
+    async uploadFile(file: any, fileName: string, bucketName: string): Promise<string> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let exists = await this.checkBucketExists(bucketName);
+                if (!exists) await this.createBucket(bucketName);
+                let buffer = await file.arrayBuffer();
+                this.minioClient.putObject(bucketName, fileName, buffer as Buffer, file.size, (err, etag) => {
+                    if (err) {
+                        throw err;
+                    }
+                    resolve(fileName);
+                });
+            } catch (err) {
+                throw err;
+            }
+        });
+    }
+
+    async getFile(fileName: string, bucketName: string) {
         try {
+            let exists = await this.checkBucketExists(bucketName);
+            if (!exists) throw new Error("Bucket does not exist");
             const file = await this.minioClient.getObject(process.env.MINIO_BUCKET_NAME, fileName);
             return file;
         } catch (err) {
@@ -45,8 +74,10 @@ export class MinioService {
         }
     }
 
-    async deleteFile(fileName: string) {
+    async deleteFile(fileName: string, bucketName: string) {
         try {
+            let exists = await this.checkBucketExists(bucketName);
+            if (!exists) throw new Error("Bucket does not exist");
             await this.minioClient.removeObject(process.env.MINIO_BUCKET_NAME, fileName);
             return true;
         } catch (err) {
@@ -54,8 +85,10 @@ export class MinioService {
         }
     }
 
-    async deleteFiles(fileNames: string[]) {
+    async deleteFiles(fileNames: string[], bucketName: string) {
         try {
+            let exists = await this.checkBucketExists(bucketName);
+            if (!exists) throw new Error("Bucket does not exist");
             await this.minioClient.removeObjects(process.env.MINIO_BUCKET_NAME, fileNames);
             return true;
         } catch (err) {
@@ -63,9 +96,11 @@ export class MinioService {
         }
     }
 
-    async deleteAllFiles() {
+    async deleteAllFiles(bucketName: string) {
         try {
-            const objectsStream = await this.minioClient.listObjects(process.env.MINIO_BUCKET_NAME, "", true);
+            let exists = await this.checkBucketExists(bucketName);
+            if (!exists) throw new Error("Bucket does not exist");
+            const objectsStream = this.minioClient.listObjects(process.env.MINIO_BUCKET_NAME, "", true);
             const fileNames = [];
             for await (const obj of objectsStream) {
                 fileNames.push(obj.name);
@@ -77,8 +112,10 @@ export class MinioService {
         }
     }
 
-    async getAllFileNames() {
+    async getAllFileNames(bucketName: string) {
         try {
+            let exists = await this.checkBucketExists(bucketName);
+            if (!exists) throw new Error("Bucket does not exist");
             const objectsStream = this.minioClient.listObjects(process.env.MINIO_BUCKET_NAME, "", true);
             const fileNames = [];
             for await (const obj of objectsStream) {
@@ -90,8 +127,10 @@ export class MinioService {
         }
     }
 
-    async getAllFiles() {
+    async getAllFiles(bucketName: string) {
         try {
+            let exists = await this.checkBucketExists(bucketName);
+            if (!exists) throw new Error("Bucket does not exist");
             const objectsStream = this.minioClient.listObjects(process.env.MINIO_BUCKET_NAME, "", true);
             const files = [];
             for await (const obj of objectsStream) {

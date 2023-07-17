@@ -1,0 +1,27 @@
+type File {
+    fileName: String!
+    file: String!
+    description: String!
+}
+
+input CreateFileInput {
+    file: String!
+    description: String!
+}
+
+input UpdateFileInput {
+    fileName: String!
+    file: String!
+    description: String
+}
+
+type Query {
+    file: [File]!
+    file(fileName: String!): File
+}
+
+type Mutation {
+    createFile(createFileInput: CreateFileInput!): File!
+    updateFile(updateFileInput: UpdateFileInput!): File!
+    removeFile(fileName: String!): Boolean
+}
