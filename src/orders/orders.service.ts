@@ -7,7 +7,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class OrdersService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async create(createOrderInput: CreateOrderInput, userId: number) {
+    async create(createOrderInput: Required<CreateOrderInput>, userId: number) {
         let order = await this.prisma.client.orders.create({
             data: {
                 ...createOrderInput,
