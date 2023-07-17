@@ -19,9 +19,11 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@minio/minio": [
+        "libs/minio/src",
         "libs/minio/src"
       ],
       "@minio/minio/*": [
+        "libs/minio/src/*",
         "libs/minio/src/*"
       ],
       "@postgres/postgres": [

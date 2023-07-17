@@ -1,27 +1,29 @@
+scalar Upload
+
 type File {
     fileName: String!
-    file: String!
-    description: String!
+    file: Upload
+    mimeType: String
 }
 
 input CreateFileInput {
-    file: String!
-    description: String!
+    file: Upload!
+    mimeType: String!
 }
 
 input UpdateFileInput {
     fileName: String!
-    file: String!
-    description: String
+    file: Upload!
+    mimeType: String!
 }
 
 type Query {
-    file: [File]!
+    files: [File]!
     file(fileName: String!): File
 }
 
 type Mutation {
     createFile(createFileInput: CreateFileInput!): File!
     updateFile(updateFileInput: UpdateFileInput!): File!
-    removeFile(fileName: String!): Boolean
+    removeFile(fileName: String!): Boolean!
 }

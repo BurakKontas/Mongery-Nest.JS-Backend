@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
 import { GlobalExceptionFilter } from "./global-exception/global-exception.filter";
+import { json } from "body-parser";
 
 async function bootstrap() {
     dotenv.config();
@@ -15,6 +16,9 @@ async function bootstrap() {
         //     cert: fs.readFileSync(path.join(certsDir, 'certificate.crt')),
         // },
     });
+
+    app.use(json({ limit: "50mb" }));
+
     app.enableCors({
         origin: "*", // TODO: Change this to the actual origin
     });

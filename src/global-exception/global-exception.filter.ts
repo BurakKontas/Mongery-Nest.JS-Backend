@@ -14,7 +14,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
         this.logger = createLogger({
             transports: [
-                new transports.Console(), // Konsola log çıktısı
                 new DailyRotateFile({
                     dirname: logDirectory,
                     filename: "%DATE%.log",

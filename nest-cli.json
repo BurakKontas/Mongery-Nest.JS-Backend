@@ -3,15 +3,6 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "projects": {
-    "minio": {
-      "type": "library",
-      "root": "libs/minio",
-      "entryFile": "index",
-      "sourceRoot": "libs/minio/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/minio/tsconfig.lib.json"
-      }
-    },
     "crypter": {
       "type": "library",
       "root": "libs/crypter",
@@ -28,6 +19,15 @@
       "sourceRoot": "libs/redis/src",
       "compilerOptions": {
         "tsConfigPath": "libs/redis/tsconfig.lib.json"
+      }
+    },
+    "minio": {
+      "type": "library",
+      "root": "libs/minio",
+      "entryFile": "index",
+      "sourceRoot": "libs/minio/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/minio/tsconfig.lib.json"
       }
     }
   },

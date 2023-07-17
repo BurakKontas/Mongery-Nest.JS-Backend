@@ -3,14 +3,12 @@ import { FileService } from "./file.service";
 import { CreateFileInput } from "./dto/create-file.input";
 import { UpdateFileInput } from "./dto/update-file.input";
 import { UseGuards } from "@nestjs/common";
-import { CheckUserGuard } from "src/check-user/check-user.guard";
 import { AuthGuard } from "src/auth/auth.guard";
 import { RolesGuard } from "src/roles/roles.guard";
 import { Roles } from "src/roles/roles.decorator";
 import { AuthRoles } from "src/users/enums/AuthRoles";
 import { UserId } from "src/get-user/get-user.decorator";
 
-@UseGuards(CheckUserGuard)
 @UseGuards(AuthGuard)
 @UseGuards(RolesGuard)
 @Roles(AuthRoles.USER, AuthRoles.ADMIN)
@@ -19,11 +17,11 @@ export class FileResolver {
     constructor(private readonly fileService: FileService) {}
 
     @Mutation("createFile")
-    create(@Args("createFileInput") createFileInput: CreateFileInput, @UserId() userId: number) {
+    create(@Args("createFileInput") createFileInput: any, @UserId() userId: number) {
         return this.fileService.create(createFileInput, userId);
     }
 
-    @Query("file")
+    @Query("files")
     findAll(@UserId() userId: number) {
         return this.fileService.findAll(userId);
     }

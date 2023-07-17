@@ -1,4 +1,4 @@
 export class CreateFileInput {
-    file: Blob;
-    description: string;
+    file: string;
+    mimeType: string;
 }
