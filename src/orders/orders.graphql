@@ -20,27 +20,19 @@ type ProductQuery {
 
 type Order {
     id: Int!
-    image: String
-    title: String
-    shortDesc: String
     total: Float
     variant: String
     products: [ProductQuery]
     customer: Customer
-    # invoice: Invoice
+    invoice: Invoice
     state: State
-    category: Category
     createdAt: String
     updatedAt: String
 }
 
 input CreateOrderInput {
-    image: String
-    title: String!
-    categoryId: Int!
     stateId: Int!
-    shortDesc: String
-    total: Float!
+    invoice: String
     variant: String!
     products: [Order_Products!]
     customerId: Int!
@@ -48,12 +40,8 @@ input CreateOrderInput {
 
 input UpdateOrderInput {
     id: Int!
-    image: String
-    title: String!
-    categoryId: Int!
     stateId: Int!
-    shortDesc: String
-    total: Float!
+    invoice: String
     variant: String!
     products: [Order_Products!]
     customerId: Int!

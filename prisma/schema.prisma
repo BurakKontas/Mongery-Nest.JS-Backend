@@ -56,7 +56,6 @@ model Categories {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   Products  Products[] @relation("product-category")
-  Orders    Orders[]   @relation("order-category")
 
   @@index([userId])
 }
@@ -108,23 +107,17 @@ model Products {
 
 model Orders {
   id            Int             @id @default(autoincrement())
-  image         String
-  title         String
-  categoryId    Int
-  category      Categories      @relation(fields: [categoryId], references: [id], name: "order-category")
   stateId       Int
   state         States          @relation(fields: [stateId], references: [id], name: "order-state")
-  shortDesc     String
-  total         Float
   variant       String
   customerId    Int
   customer      Customers       @relation(fields: [customerId], references: [id], name: "order-customer")
   userId        Int
   user          Users           @relation(fields: [userId], references: [id], name: "order-user")
   Invoice       Invoice[]       @relation("invoice-order")
+  Order_Product Order_Product[] @relation("order-product-order")
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  Order_Product Order_Product[] @relation("order-product-order")
 }
 
 model Order_Product {
@@ -144,6 +137,8 @@ model Invoice {
   user      Users    @relation(fields: [userId], references: [id], name: "invoice-user")
   orderId   Int
   order     Orders   @relation(fields: [orderId], references: [id], name: "invoice-order")
+  file      Minio    @relation(fields: [fileId], references: [id], name: "invoice-file")
+  fileId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -160,9 +155,10 @@ model Cart {
 }
 
 model Minio {
-  id       Int    @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   fileName String
   mimeType String
   userId   Int
-  user     Users  @relation(fields: [userId], references: [id], name: "minio-user")
+  user     Users     @relation(fields: [userId], references: [id], name: "minio-user")
+  Invoice  Invoice[] @relation("invoice-file")
 }

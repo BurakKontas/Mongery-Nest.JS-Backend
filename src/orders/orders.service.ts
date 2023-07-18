@@ -23,27 +23,22 @@ export class OrdersService {
                 Order_Product: true,
                 customer: true,
                 state: true,
-                category: true,
                 Invoice: true,
             },
         });
+
+        let total = 0;
+        order.Order_Product.forEach(async (p) => {
+            let product = await this.prisma.client.products.findUnique({
+                where: {
+                    id: p.productId,
+                },
+            });
+            total += p.quantity * product.price;
+        });
+
+        order["total"] = total;
         order["products"] = order.Order_Product;
-        //@ts-ignore
-        order.customer.createdAt = order.customer.createdAt.toISOString();
-        //@ts-ignore
-        order.customer.updatedAt = order.customer.updatedAt.toISOString();
-        //@ts-ignore
-        order.state.createdAt = order.state.createdAt.toISOString();
-        //@ts-ignore
-        order.state.updatedAt = order.state.updatedAt.toISOString();
-        //@ts-ignore
-        order.category.createdAt = order.category.createdAt.toISOString();
-        //@ts-ignore
-        order.category.updatedAt = order.category.updatedAt.toISOString();
-        //@ts-ignore
-        order.Invoice.createdAt = order.Invoice.createdAt.toISOString();
-        //@ts-ignore
-        order.Invoice.updatedAt = order.Invoice.updatedAt.toISOString();
 
         //@ts-ignore
         order.createdAt = order.createdAt.toISOString();
@@ -62,29 +57,22 @@ export class OrdersService {
                 Order_Product: true,
                 customer: true,
                 state: true,
-                category: true,
                 Invoice: true,
             },
         });
 
-        //@ts-ignore
-        order.customer.createdAt = order.customer.createdAt.toISOString();
-        //@ts-ignore
-        order.customer.updatedAt = order.customer.updatedAt.toISOString();
-        //@ts-ignore
-        order.state.createdAt = order.state.createdAt.toISOString();
-        //@ts-ignore
-        order.state.updatedAt = order.state.updatedAt.toISOString();
-        //@ts-ignore
-        order.category.createdAt = order.category.createdAt.toISOString();
-        //@ts-ignore
-        order.category.updatedAt = order.category.updatedAt.toISOString();
-        //@ts-ignore
-        order.Invoice.createdAt = order.Invoice.createdAt.toISOString();
-        //@ts-ignore
-        order.Invoice.updatedAt = order.Invoice.updatedAt.toISOString();
-
         orders = orders.map((order) => {
+            let total = 0;
+            order.Order_Product.forEach(async (p) => {
+                let product = await this.prisma.client.products.findUnique({
+                    where: {
+                        id: p.productId,
+                    },
+                });
+                total += p.quantity * product.price;
+            });
+
+            order["total"] = total;
             order["products"] = order.Order_Product;
             //@ts-ignore
             order.createdAt = order.createdAt.toISOString();
@@ -105,7 +93,6 @@ export class OrdersService {
                 Order_Product: true,
                 customer: true,
                 state: true,
-                category: true,
                 Invoice: true,
             },
         });
@@ -118,36 +105,20 @@ export class OrdersService {
                 product: true,
             },
         });
-
-        //@ts-ignore
-        order.customer.createdAt = order.customer.createdAt.toISOString();
-        //@ts-ignore
-        order.customer.updatedAt = order.customer.updatedAt.toISOString();
-        //@ts-ignore
-        order.state.createdAt = order.state.createdAt.toISOString();
-        //@ts-ignore
-        order.state.updatedAt = order.state.updatedAt.toISOString();
-        //@ts-ignore
-        order.category.createdAt = order.category.createdAt.toISOString();
-        //@ts-ignore
-        order.category.updatedAt = order.category.updatedAt.toISOString();
-        //@ts-ignore
-        order.Invoice.createdAt = order.Invoice.createdAt.toISOString();
-        //@ts-ignore
-        order.Invoice.updatedAt = order.Invoice.updatedAt.toISOString();
-
+        let total = 0;
         products.forEach((product) => {
             order["products"].push({
                 quantity: product.quantity,
                 product: product.product,
             });
 
+            total += product.quantity * product.product.price;
             //@ts-ignore
             product.product.createdAt = product.product.createdAt.toISOString();
             //@ts-ignore
             product.product.updatedAt = product.product.updatedAt.toISOString();
         });
-        console.log(order["products"]);
+        order["total"] = total;
         //@ts-ignore
         order.createdAt = order.createdAt.toISOString();
         //@ts-ignore
@@ -168,27 +139,23 @@ export class OrdersService {
                 Order_Product: true,
                 customer: true,
                 state: true,
-                category: true,
                 Invoice: true,
             },
         });
+
+        let total = 0;
+        order.Order_Product.forEach(async (p) => {
+            let product = await this.prisma.client.products.findUnique({
+                where: {
+                    id: p.productId,
+                },
+            });
+            total += p.quantity * product.price;
+        });
+
+        order["total"] = total;
         order["products"] = order.Order_Product;
-        //@ts-ignore
-        order.customer.createdAt = order.customer.createdAt.toISOString();
-        //@ts-ignore
-        order.customer.updatedAt = order.customer.updatedAt.toISOString();
-        //@ts-ignore
-        order.state.createdAt = order.state.createdAt.toISOString();
-        //@ts-ignore
-        order.state.updatedAt = order.state.updatedAt.toISOString();
-        //@ts-ignore
-        order.category.createdAt = order.category.createdAt.toISOString();
-        //@ts-ignore
-        order.category.updatedAt = order.category.updatedAt.toISOString();
-        //@ts-ignore
-        order.Invoice.createdAt = order.Invoice.createdAt.toISOString();
-        //@ts-ignore
-        order.Invoice.updatedAt = order.Invoice.updatedAt.toISOString();
+
         //@ts-ignore
         order.createdAt = order.createdAt.toISOString();
         //@ts-ignore

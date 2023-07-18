@@ -14,7 +14,6 @@ export class InvoiceService {
             include: {
                 order: {
                     include: {
-                        category: true,
                         state: true,
                         customer: true,
                         Order_Product: {
@@ -31,7 +30,6 @@ export class InvoiceService {
             return {
                 fileName: invoice.fileName,
                 file: file,
-                order: invoice.order,
                 mimeType: file.mimeType,
                 createdAt: invoice.createdAt,
                 updatedAt: invoice.updatedAt,
@@ -50,7 +48,6 @@ export class InvoiceService {
             include: {
                 order: {
                     include: {
-                        category: true,
                         state: true,
                         customer: true,
                         Order_Product: {
@@ -66,7 +63,6 @@ export class InvoiceService {
         return {
             fileName: invoice.fileName,
             file: file,
-            order: invoice.order,
             mimeType: file.mimeType,
             createdAt: invoice.createdAt,
             updatedAt: invoice.updatedAt,
