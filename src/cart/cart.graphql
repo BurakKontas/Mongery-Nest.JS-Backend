@@ -1,0 +1,29 @@
+type Cart {
+    id: Int
+    products: Product
+    quantity: Int
+    createdAt: String
+    updatedAt: String
+}
+
+input CreateCartInput {
+    productId: Int!
+    quantity: Int
+}
+
+input UpdateCartInput {
+    id: Int!
+    productId: Int
+    quantity: Int
+}
+
+type Query {
+    carts: [Cart]!
+    cart(id: Int!): Cart
+}
+
+type Mutation {
+    createCart(createCartInput: CreateCartInput!): Cart!
+    updateCart(updateCartInput: UpdateCartInput!): Cart!
+    removeCart(id: Int!): Boolean
+}

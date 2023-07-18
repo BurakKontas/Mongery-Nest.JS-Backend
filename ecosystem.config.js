@@ -3,7 +3,7 @@ module.exports = {
         {
             name: "nestjs-app",
             script: "dist/src/main.js",
-            instances: 2,
+            instances: 1,
             exec_mode: "cluster",
             autorestart: true,
             watch: true,

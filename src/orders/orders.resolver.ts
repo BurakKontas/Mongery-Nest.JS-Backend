@@ -11,10 +11,10 @@ import { OrdersService } from "./orders.service";
 import { CreateOrderInput } from "./dto/create-order.input";
 import { UpdateOrderInput } from "./dto/update-order.input";
 
-@Resolver("Order")
 @UseGuards(AuthGuard)
 @UseGuards(RolesGuard)
 @Roles(AuthRoles.USER, AuthRoles.ADMIN)
+@Resolver("Order")
 export class OrdersResolver {
     constructor(private readonly customersService: OrdersService) {}
 

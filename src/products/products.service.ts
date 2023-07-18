@@ -24,6 +24,10 @@ export class ProductsService {
                 category: true,
             },
         });
+        //@ts-ignore
+        product.category.createdAt = product.category.createdAt.toISOString();
+        //@ts-ignore
+        product.category.updatedAt = product.category.updatedAt.toISOString();
 
         //@ts-ignore
         product.createdAt = product.createdAt.toISOString();
@@ -40,10 +44,15 @@ export class ProductsService {
             },
             include: {
                 customInputs: true,
+                category: true,
             },
         });
 
         products.forEach((product) => {
+            //@ts-ignore
+            product.category.createdAt = product.category.createdAt.toISOString();
+            //@ts-ignore
+            product.category.updatedAt = product.category.updatedAt.toISOString();
             //@ts-ignore
             product.createdAt = product.createdAt.toISOString();
             //@ts-ignore
@@ -60,8 +69,13 @@ export class ProductsService {
             },
             include: {
                 customInputs: true,
+                category: true,
             },
         });
+        //@ts-ignore
+        product.category.createdAt = product.category.createdAt.toISOString();
+        //@ts-ignore
+        product.category.updatedAt = product.category.updatedAt.toISOString();
 
         //@ts-ignore
         product.createdAt = product.createdAt.toISOString();
@@ -94,6 +108,7 @@ export class ProductsService {
                 },
                 include: {
                     customInputs: true,
+                    category: true,
                 },
             });
         } else {
@@ -106,8 +121,14 @@ export class ProductsService {
                 },
                 include: {
                     customInputs: true,
+                    category: true,
                 },
             });
+
+            //@ts-ignore
+            product.category.createdAt = product.category.createdAt.toISOString();
+            //@ts-ignore
+            product.category.updatedAt = product.category.updatedAt.toISOString();
         }
 
         //@ts-ignore

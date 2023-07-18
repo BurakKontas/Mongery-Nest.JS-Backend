@@ -12,7 +12,7 @@ type Product {
     id: Int!
     image: String
     title: String
-    categoryId: Int
+    category: Category
     price: Float
     stock: Int
     description: String

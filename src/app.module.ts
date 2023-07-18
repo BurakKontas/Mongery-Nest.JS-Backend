@@ -17,6 +17,7 @@ import { RateLimitMiddleware } from "./rate-limit/rate-limit.middleware";
 import { LoggingMiddleware } from "./logging/logging.middleware";
 import { OrdersModule } from "./orders/orders.module";
 import { FileModule } from "./file/file.module";
+import { CartModule } from './cart/cart.module';
 
 @Module({
     imports: [
@@ -37,6 +38,7 @@ import { FileModule } from "./file/file.module";
         RedisModule,
         OrdersModule,
         FileModule,
+        CartModule,
     ],
     controllers: [AppController],
     providers: [AppService, PrismaService],

@@ -1,15 +1,37 @@
+input Order_Products {
+    quantity: Int!
+    productId: Int!
+}
+
+type Order_Product {
+    id: Int
+    orderId: Int
+    quantity: Int
+    productId: Int
+}
+
+type ProductQuery {
+    id: Int
+    orderId: Int
+    quantity: Int
+    productId: Int
+    product: Product
+}
+
 type Order {
     id: Int!
-    image: String!
-    title: String!
-    categoryId: Int!
-    stateId: Int!
-    shortDesc: String!
-    price: Float!
-    quantity: Int!
-    variant: String!
-    productId: Int!
-    customerId: Int!
+    image: String
+    title: String
+    shortDesc: String
+    total: Float
+    variant: String
+    products: [ProductQuery]
+    customer: Customer
+    # invoice: Invoice
+    state: State
+    category: Category
+    createdAt: String
+    updatedAt: String
 }
 
 input CreateOrderInput {
@@ -18,25 +40,23 @@ input CreateOrderInput {
     categoryId: Int!
     stateId: Int!
     shortDesc: String
-    price: Float!
-    quantity: Int!
+    total: Float!
     variant: String!
-    productId: Int!
+    products: [Order_Products!]
     customerId: Int!
 }
 
 input UpdateOrderInput {
     id: Int!
     image: String
-    title: String
-    categoryId: Int
-    stateId: Int
+    title: String!
+    categoryId: Int!
+    stateId: Int!
     shortDesc: String
-    price: Float
-    quantity: Int
-    variant: String
-    productId: Int
-    customerId: Int
+    total: Float!
+    variant: String!
+    products: [Order_Products!]
+    customerId: Int!
 }
 
 type Query {
