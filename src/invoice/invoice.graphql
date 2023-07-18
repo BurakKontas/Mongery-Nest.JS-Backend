@@ -1,0 +1,14 @@
+type Invoice {
+    fileName: String!
+    proforma: String
+    mimeType: String!
+    file: String!
+    order: Order
+    createdAt: String!
+    updatedAt: String!
+}
+
+type Query {
+    invoices: [Invoice]!
+    invoice(fileName: String!): Invoice
+}

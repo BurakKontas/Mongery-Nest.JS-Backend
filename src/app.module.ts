@@ -18,6 +18,7 @@ import { LoggingMiddleware } from "./logging/logging.middleware";
 import { OrdersModule } from "./orders/orders.module";
 import { FileModule } from "./file/file.module";
 import { CartModule } from './cart/cart.module';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
     imports: [
@@ -39,6 +40,7 @@ import { CartModule } from './cart/cart.module';
         OrdersModule,
         FileModule,
         CartModule,
+        InvoiceModule,
     ],
     controllers: [AppController],
     providers: [AppService, PrismaService],
