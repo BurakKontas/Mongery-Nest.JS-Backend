@@ -20,7 +20,16 @@ export class OrdersService {
                 userId,
             },
             include: {
-                Order_Product: true,
+                Order_Product: {
+                    include: {
+                        product: {
+                            include: {
+                                category: true,
+                                customInputs: true,
+                            },
+                        },
+                    },
+                },
                 customer: true,
                 state: true,
                 Invoice: true,
@@ -54,7 +63,16 @@ export class OrdersService {
                 userId,
             },
             include: {
-                Order_Product: true,
+                Order_Product: {
+                    include: {
+                        product: {
+                            include: {
+                                category: true,
+                                customInputs: true,
+                            },
+                        },
+                    },
+                },
                 customer: true,
                 state: true,
                 Invoice: true,
@@ -90,7 +108,16 @@ export class OrdersService {
                 id,
             },
             include: {
-                Order_Product: true,
+                Order_Product: {
+                    include: {
+                        product: {
+                            include: {
+                                category: true,
+                                customInputs: true,
+                            },
+                        },
+                    },
+                },
                 customer: true,
                 state: true,
                 Invoice: true,
@@ -102,7 +129,12 @@ export class OrdersService {
                 orderId: id,
             },
             include: {
-                product: true,
+                product: {
+                    include: {
+                        customInputs: true,
+                        category: true,
+                    },
+                },
             },
         });
         let total = 0;
@@ -136,7 +168,16 @@ export class OrdersService {
                 ...updateOrderInput,
             },
             include: {
-                Order_Product: true,
+                Order_Product: {
+                    include: {
+                        product: {
+                            include: {
+                                category: true,
+                                customInputs: true,
+                            },
+                        },
+                    },
+                },
                 customer: true,
                 state: true,
                 Invoice: true,
