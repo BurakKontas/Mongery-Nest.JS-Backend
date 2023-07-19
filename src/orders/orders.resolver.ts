@@ -18,7 +18,6 @@ import { UpdateOrderInput } from "./dto/update-order.input";
 export class OrdersResolver {
     constructor(private readonly customersService: OrdersService) {}
 
-    @CheckUser("categories", "categoryId")
     @CheckUser("products", "productId")
     @CheckUser("customers", "customerId")
     @Mutation("createOrder")
@@ -37,9 +36,7 @@ export class OrdersResolver {
         return this.customersService.findOne(id);
     }
 
-    @CheckUser("categories", "categoryId")
     @CheckUser("products", "productId")
-    @CheckUser("customers", "customerId")
     @CheckUser("orders")
     @Mutation("updateOrder")
     update(@Args("updateOrderInput") updateOrderInput: UpdateOrderInput) {

@@ -40,7 +40,7 @@ model Customers {
   description String?
   address     String?
   userId      Int
-  user        Users    @relation(fields: [userId], references: [id], name: "customer-user")
+  user        Users    @relation(fields: [userId], references: [id], name: "customer-user", onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   Orders      Orders[] @relation("order-customer")
@@ -52,7 +52,7 @@ model Categories {
   id        Int        @id @default(autoincrement())
   name      String
   userId    Int
-  user      Users      @relation(fields: [userId], references: [id], name: "category-user")
+  user      Users      @relation(fields: [userId], references: [id], name: "category-user", onDelete: Cascade)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   Products  Products[] @relation("product-category")
@@ -64,7 +64,7 @@ model States {
   id        Int      @id @default(autoincrement())
   name      String
   userId    Int
-  user      Users    @relation(fields: [userId], references: [id], name: "state-user")
+  user      Users    @relation(fields: [userId], references: [id], name: "state-user", onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Orders    Orders[] @relation("order-state")
@@ -77,7 +77,7 @@ model CustomInputs {
   key       String
   value     String
   productId Int
-  product   Products @relation(fields: [productId], references: [id], name: "custom-input-product")
+  product   Products @relation(fields: [productId], references: [id], name: "custom-input-product", onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -89,14 +89,14 @@ model Products {
   image         String
   title         String
   categoryId    Int
-  category      Categories      @relation(fields: [categoryId], references: [id], name: "product-category")
+  category      Categories      @relation(fields: [categoryId], references: [id], name: "product-category", onDelete: Cascade)
   price         Float
   stock         Int
   description   String          @default("")
   variant       String
   customInputs  CustomInputs[]  @relation("custom-input-product")
   userId        Int
-  user          Users           @relation(fields: [userId], references: [id], name: "product-user")
+  user          Users           @relation(fields: [userId], references: [id], name: "product-user", onDelete: Cascade)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   Order_Product Order_Product[] @relation("order-product-product")
@@ -108,12 +108,12 @@ model Products {
 model Orders {
   id            Int             @id @default(autoincrement())
   stateId       Int
-  state         States          @relation(fields: [stateId], references: [id], name: "order-state")
+  state         States          @relation(fields: [stateId], references: [id], name: "order-state", onDelete: Cascade)
   variant       String
   customerId    Int
-  customer      Customers       @relation(fields: [customerId], references: [id], name: "order-customer")
+  customer      Customers       @relation(fields: [customerId], references: [id], name: "order-customer", onDelete: Cascade)
   userId        Int
-  user          Users           @relation(fields: [userId], references: [id], name: "order-user")
+  user          Users           @relation(fields: [userId], references: [id], name: "order-user", onDelete: Cascade)
   Invoice       Invoice[]       @relation("invoice-order")
   Order_Product Order_Product[] @relation("order-product-order")
   createdAt     DateTime        @default(now())
@@ -124,9 +124,9 @@ model Order_Product {
   id        Int      @id @default(autoincrement())
   quantity  Int
   orderId   Int
-  order     Orders   @relation(fields: [orderId], references: [id], name: "order-product-order")
+  order     Orders   @relation(fields: [orderId], references: [id], name: "order-product-order", onDelete: Cascade)
   productId Int
-  product   Products @relation(fields: [productId], references: [id], name: "order-product-product")
+  product   Products @relation(fields: [productId], references: [id], name: "order-product-product", onDelete: Cascade)
 }
 
 model Invoice {
@@ -134,10 +134,10 @@ model Invoice {
   fileName  String
   proforma  String
   userId    Int
-  user      Users    @relation(fields: [userId], references: [id], name: "invoice-user")
+  user      Users    @relation(fields: [userId], references: [id], name: "invoice-user", onDelete: Cascade)
   orderId   Int
-  order     Orders   @relation(fields: [orderId], references: [id], name: "invoice-order")
-  file      Minio    @relation(fields: [fileId], references: [id], name: "invoice-file")
+  order     Orders   @relation(fields: [orderId], references: [id], name: "invoice-order", onDelete: Cascade)
+  file      Minio    @relation(fields: [fileId], references: [id], name: "invoice-file", onDelete: Cascade)
   fileId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -146,9 +146,9 @@ model Invoice {
 model Cart {
   id        Int      @id @default(autoincrement())
   productId Int
-  products  Products @relation(fields: [productId], references: [id], name: "cart-product")
+  products  Products @relation(fields: [productId], references: [id], name: "cart-product", onDelete: Cascade)
   userId    Int
-  user      Users    @relation(fields: [userId], references: [id], name: "cart-user")
+  user      Users    @relation(fields: [userId], references: [id], name: "cart-user", onDelete: Cascade)
   quantity  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -159,6 +159,6 @@ model Minio {
   fileName String
   mimeType String
   userId   Int
-  user     Users     @relation(fields: [userId], references: [id], name: "minio-user")
+  user     Users     @relation(fields: [userId], references: [id], name: "minio-user", onDelete: Cascade)
   Invoice  Invoice[] @relation("invoice-file")
 }
