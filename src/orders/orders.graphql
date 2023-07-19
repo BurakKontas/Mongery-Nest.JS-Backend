@@ -44,7 +44,7 @@ input UpdateOrderInput {
     invoice: String
     variant: String!
     products: [Order_Products!]
-    customerId: Int!
+    customerId: Int
 }
 
 type Query {
